@@ -7,16 +7,16 @@ trigger:
 - master
 
 pool:
-  vmImage: windows-2019
-
+  name: Default
 steps:
 - task: Gradle@2
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
     gradleOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
+    javaHomeOption: 'JAVA_HOME'
+    jdkVersionOption: '11'
+    jdkUserInputPath: 'C:\Program Files\Java\jdk-11.0.16.1'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
