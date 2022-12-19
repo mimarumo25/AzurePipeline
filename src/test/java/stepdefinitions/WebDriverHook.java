@@ -13,7 +13,7 @@ public class WebDriverHook {
         System.out.println("Inicio Test");
         switch (SystemEnvironmentVariables.createEnvironmentVariables().getProperty("webdriver.driver")) {
             case "chrome":
-              //  WebDriverManager.chromedriver().setup();
+              WebDriverManager.chromedriver().setup();
                 break;
             case "iexplorer":
                 WebDriverManager.iedriver().setup();
@@ -22,7 +22,7 @@ public class WebDriverHook {
                 WebDriverManager.firefoxdriver().setup();
                 break;
             default:
-                //WebDriverManager.chromedriver().setup();
+                WebDriverManager.chromedriver().setup();
                 break;
         }
         OnStage.setTheStage(new OnlineCast());
