@@ -18,10 +18,10 @@ import java.util.List;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class SerenityStepDefinitions {
-    @Before
+   /* @Before
     public void setStage() {
         OnStage.setTheStage((new OnlineCast()));
-    }
+    }*/
 
     @Dado("^que miguel quiere iniciar sesion con  \"([^\"]*)\" y \"([^\"]*)\" en serenity\\.is$")
     public void queMiguelQuiereIniciarSesionConYEnSerenityIs(String strUsuario, String strPassword) {
