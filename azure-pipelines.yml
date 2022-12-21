@@ -1,26 +1,43 @@
-# Gradle
-# Build your Java project and run tests with Gradle using a Gradle wrapper script.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
-trigger:
-- master
-
-pool:
-  name: Default
-steps:
-- task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    javaHomeOption: 'JAVA_HOME'
-    jdkVersionOption: '11'
-    jdkUserInputPath: 'C:\Program Files\Java\jdk-11.0.16.1'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'clean build -x test'
-- task: CmdLine@2
-  inputs:
-    script: 'gradle clean test aggregate'
+name: $(date:yyyyMMdd)$(rev:.r)
+jobs:
+- job: Job_1
+  displayName: Agent job 1
+  pool:
+    name: Defauld
+  steps:
+  - checkout: self
+    clean: true
+    fetchTags: false
+  - task: SonarQubePrepare@5
+    displayName: Prepare analysis on SonarQube
+    inputs:
+      SonarQube: f018605b1920ff1150e8b0cec8491c1e4a5679f6
+      scannerMode: CLI
+      configMode: manual
+      cliProjectKey: $(Build.Repository.Name)
+      projectKey: $(Build.Repository.Name)
+      cliProjectName: $(Build.Repository.Name)
+      projectName: $(Build.Repository.Name)
+      cliProjectVersion: $(Build.BuildNumber)
+      projectVersion: $(Build.BuildNumber)
+      cliSources: BDDTestChocairTesting
+      extraProperties: "# Additional properties that will be passed to the scanner, \n# Put one key=value per line, example:\n# sonar.exclusions=**/*.bin\n\nsonar.sourceEncoding=UTF-8\nsonar.java.binaries=BDDTestChocairTesting/build\n"
+  - task: Gradle@2
+    displayName: gradlew clean build -x test
+    inputs:
+      tasks: clean build -x test
+  - task: SonarQubeAnalyze@4
+    displayName: Run Code Analysis
+  - task: sonar-buildbreaker@8
+    displayName: Break build on quality gate failure
+    inputs:
+      SonarQube: f7fbc12f-c933-4c9f-b206-40292d0850f8
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+    inputs:
+      TargetFolder: ' $(build.artifactstagingdirectory)'
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: BDDTestChocairTesting_Test_Artifact'
+    inputs:
+      ArtifactName: BDDTestChocairTesting_Test_Artifact
+...
