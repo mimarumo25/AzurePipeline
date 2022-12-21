@@ -31,7 +31,7 @@ jobs:
   - task: sonar-buildbreaker@8
     displayName: Break build on quality gate failure
     inputs:
-      SonarQube: f7fbc12f-c933-4c9f-b206-40292d0850f8
+      SonarQube: f018605b1920ff1150e8b0cec8491c1e4a5679f6
   - task: CopyFiles@2
     displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
     inputs:
